@@ -41,12 +41,6 @@ ostream& operator<< (ostream& out, const Card& card)
 	return out;
 }
 
-//Class Hand
-Hand::Hand()
-{
-	cards.reserve(7);
-}
-
 Hand::~Hand()
 {
 	Clear();
@@ -103,9 +97,6 @@ int Hand::GetTotal()const
 GenericPlayer::GenericPlayer(const std::string& _name): name(_name)
 {}
 
-GenericPlayer::~GenericPlayer()
-{}
-
 bool GenericPlayer::isBusted()
 {
 	return (GetTotal() > 21);
@@ -145,15 +136,13 @@ Player::Player(const std::string& _name)
 	name = _name;
 }
 
-Player::~Player()
-{}
-
 bool Player::isHitting() 
 {
 	std::cout <<name<< ", do you want a hit? (Y/N):\n";
-	char response;
+	char response{};
 	while (true)
 	{
+		cin.ignore(1000, '\n');
 		cin.get(response);
 		if (response != 'y' && response != 'Y' && response != 'n' && response != 'N')
 		{
@@ -204,25 +193,16 @@ void House::FlipFirstCard()
 		cout << "No card to flip!\n";
 }
 
-//Class Deck
-Deck::Deck()
-{
-	cards.reserve(52);
-	Populate();
-}
-
-Deck::~Deck()
-{}
-
 void Deck::Populate()
 {
-	for (int s{ CardSuit::club }; s <= CardSuit::diamond; ++s)
+	for (int s{ CardSuit::club }; s <= CardSuit::spade; ++s)
 	{
 		for (int r{ CardRank::ace }; r <= CardRank::king; ++r)
 		{
 			Add(new Card((CardSuit)s,(CardRank)r));
 		}
 	}
+
 }
 
 void Deck::Shuffle()
@@ -232,7 +212,7 @@ void Deck::Shuffle()
 
 void Deck::Deal(Hand& hand)
 {
-	if (cards.empty())
+	if (!cards.empty())
 	{
 		hand.Add(cards.back());
 		cards.pop_back();
@@ -248,7 +228,7 @@ void Deck::AdditionalCards(GenericPlayer& genericPlayer)
 	while (!(genericPlayer.isBusted()) && genericPlayer.isHitting())
 	{
 		Deal(genericPlayer);
-		std::cout << genericPlayer;
+		std::cout << genericPlayer<<'\n';
 
 		if (genericPlayer.isBusted())
 			genericPlayer.Bust();
@@ -258,6 +238,7 @@ void Deck::AdditionalCards(GenericPlayer& genericPlayer)
 //Class Game
 Game::Game(const vector<string>& names)
 {
+	//deck.Clear();
 	vector<string>::const_iterator pName;
 	for (pName = names.begin(); pName != names.end(); ++pName)
 	{
@@ -269,9 +250,6 @@ Game::Game(const vector<string>& names)
 	deck.Populate();
 	deck.Shuffle();
 }
-
-Game::~Game()
-{}
 
 void Game::Play()
 {

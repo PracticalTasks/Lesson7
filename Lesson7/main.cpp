@@ -1,7 +1,8 @@
-//#include <iostream>
+﻿//#include <iostream>
 #include"Classes.h"
 #include<memory>
 #include"func.h"
+#include"BlackJack.h"
 
 using namespace std;
 
@@ -46,6 +47,34 @@ int main()
 	//Task 5
 	{
 		cout << "\n\nTask 5\n";
-	}
 
+		char again = 'y';
+		while (again != 'n' && again != 'N')
+		{
+			cout << "\n\t\tWelcome to Blackjack!\n\n";
+
+			int numPlayers{};
+			while (numPlayers < 1 || numPlayers > 7)
+			{
+				cout << "How many players? (1 - 7): ";
+				cin >> numPlayers;
+			}
+
+			vector<string> names;
+			string name;
+			for (int i{}; i < numPlayers; ++i)
+			{
+				cout << "Enter player name: ";
+				cin >> name;
+				names.push_back(name);
+			}
+			cout << endl;
+
+			//Игровой цикл
+			Game game(names);
+			game.Play();
+			cout << "\nDo you want to play again? (Y/N): ";
+			cin >> again;
+		}
+	}
 }

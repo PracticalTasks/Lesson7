@@ -27,7 +27,7 @@ public:
 	CardRank rank;
 	bool isFaceUp;
 
-	Card(CardSuit _suit, CardRank _rank, bool _isFaceUp = false);
+	Card(CardSuit _suit, CardRank _rank, bool _isFaceUp = true);
 	void Flip();
 	int GetValue();
 	friend ostream& operator<< (ostream& out, const Card& card);
@@ -38,7 +38,6 @@ class Hand
 protected:
 	std::vector<Card*> cards;
 public:
-	Hand();
 	virtual ~Hand();
 	void Add(Card* newCard);
 	void Clear();
@@ -55,7 +54,6 @@ protected:
 
 public:
 	GenericPlayer(const string& _name = "");
-	virtual ~GenericPlayer();
 	virtual bool isHitting() = 0;
 	bool isBusted();
 	void Bust();
@@ -66,7 +64,6 @@ class Player : public GenericPlayer
 {
 public:
 	Player(const std::string& _name = "");
-	virtual ~Player();
 	virtual bool isHitting();
 	void Win() const;
 	void Lose()const;
@@ -85,8 +82,6 @@ public:
 class Deck : public Hand
 {
 public:
-	Deck();
-	virtual ~Deck();
 	void Populate();
 	void Shuffle();
 	void Deal(Hand& hand);
@@ -101,7 +96,6 @@ class Game
 
 public:
 	Game(const vector<std::string>& names);
-	~Game();
 	void Play();
 };
 
